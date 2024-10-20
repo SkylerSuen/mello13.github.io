@@ -22,6 +22,62 @@ anchor-free object detection</span></a></li><li class="toc-item toc-level-2"><a 
 <h2 id="beit">Beit</h2>
 <h2 id="transformer的encoder的position-embedding有多少种">transformer的encoder的position
 embedding有多少种</h2>
+<ol type="1">
+<li>绝对位置嵌入（Absolute Position Embedding） 绝对位置嵌入是
+Transformer 最初在论文《Attention is All You
+Need》中使用的位置编码方式。这种方法将每个位置编码为一个固定的向量，这个向量可以直接加到输入的词向量中。绝对位置嵌入主要有以下几种实现方式：</li>
+</ol>
+<ol type="a">
+<li>固定正弦和余弦位置编码（Sinusoidal Position Embedding）</li>
+</ol>
+<p>优点：正弦和余弦函数使得位置嵌入具有周期性，因此它能表达不同位置之间的相对关系，使得模型能够泛化到不同的序列长度。</p>
+<p>使用场景：适用于需要模型对序列长度泛化能力较强的场景，比如 NLP
+中需要处理长序列的任务。</p>
+<ol start="2" type="a">
+<li>可学习的位置嵌入（Learnable Position Embedding）</li>
+</ol>
+<p>描述：可学习的位置嵌入与词嵌入类似，模型将每个位置表示为一个可学习的向量。这些位置向量在训练过程中进行优化，并且维度和词向量相同。</p>
+<p>优点：这种方式使得位置嵌入的表示更加灵活，可以更好地适应特定数据集上的模式。</p>
+<p>缺点：位置嵌入与输入的最大长度相关，当需要处理比训练时更长的序列时，可能会导致位置嵌入无法泛化。</p>
+<p>使用场景：这种方式在 NLP
+中的很多任务中被广泛使用，因为它的可学习性可以提高模型的表现。</p>
+<ol start="2" type="1">
+<li>相对位置嵌入（Relative Position Embedding）
+相对位置嵌入旨在编码序列元素之间的相对位置信息，尤其是在 Transformer
+的自注意力机制中使用相对位置的信息。</li>
+</ol>
+<ol type="a">
+<li>相对位置编码（Relative Position Encoding）</li>
+</ol>
+<p>描述：相对位置编码考虑每个位置与其他位置之间的相对距离，而不是它们的绝对位置。不同于将一个固定的位置向量加到词嵌入中，模型根据查询、键和值的关系调整注意力分数。这样可以让模型更加灵活地处理不同长度的输入。</p>
+<p>优点：这种编码方式可以使 Transformer
+对序列长度和元素之间的相对顺序更加敏感。例如，在一些需要对序列中元素之间的相对顺序进行建模的任务中（如机器翻译和问答），相对位置编码能带来显著的性能提升。</p>
+<p>代表性应用：BERT 的改进模型 Transformer-XL 和 T5
+等都使用了相对位置嵌入，以解决标准 Transformer
+对长序列泛化能力的局限性。</p>
+<ol start="2" type="a">
+<li>基于自注意力的相对位置偏置（Relative Attention Bias）</li>
+</ol>
+<p>描述：这种方法在 Transformer
+中的自注意力计算中引入一个相对位置偏置项，用于修改注意力权重。例如，T5
+和一些改进的 BERT
+变种在注意力分数的计算中引入了一个相对位置偏置，从而使模型能够更好地理解不同位置之间的相对关系。</p>
+<p>优点：相对位置偏置方法在自注意力机制中直接编码相对位置信息，使得模型在处理序列时对相对顺序更加鲁棒。</p>
+<ol start="3" type="1">
+<li>旋转位置嵌入（Rotary Position Embedding, RoPE）</li>
+</ol>
+<p>描述：RoPE
+是一种特殊的位置编码方式，通过将嵌入空间旋转变换到不同位置来嵌入位置信息。这种方法使用旋转矩阵来表示位置信息，并应用到查询和键的特征中。</p>
+<p>优点：RoPE
+在不显式增加位置嵌入向量的情况下，可以使得模型有效捕捉相对位置关系，在模型对长序列的处理上有一定的优势。</p>
+<p>使用场景：RoPE 被应用在 GPT-3
+等生成式语言模型的变种中，以提高对长序列的泛化能力。</p>
+<ol start="4" type="1">
+<li>混合位置嵌入（Hybrid Position Embedding）</li>
+</ol>
+<p>描述：混合位置嵌入结合了绝对位置和相对位置嵌入的优点，旨在为模型提供更丰富的位置信息。例如，一些模型结合了可学习的绝对位置嵌入和相对位置偏置，以实现更好的性能。</p>
+<p>优点：能够同时捕捉到绝对和相对位置信息，使得模型在不同任务上都有较好的表现。</p>
+<p>使用场景：适用于对位置信息需求复杂的任务，比如多模态任务、图像文本匹配等。</p>
 <h2 id="vit切patch的方法">vit切patch的方法</h2>
 <h2 id="nms">nms</h2>
 <h2 id="pretrain-model提特征输入encoder之前做了什么处理">pretrain
@@ -31,7 +87,7 @@ model提特征输入encoder之前做了什么处理</h2>
 <h2 id="anchor-based-和-anchor-free-object-detection">anchor-based 和
 anchor-free object detection</h2>
 <h2 id="项目的pipeline">项目的pipeline</h2>
-</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Mello13</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://skylersuen.github.io/2024/04/26/小米一面面经/">https://skylersuen.github.io/2024/04/26/小米一面面经/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2024/10/20/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%9D%A2%E7%BB%8F/"><i class="fa fa-chevron-left">  </i><span></span></a></div><div class="next-post pull-right"><a href="/2024/04/17/python%E6%89%8B%E5%86%99Transformer/"><span>python手写Transformer</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://raw.githubusercontent.com/SkylerSuen/PicBase/master/topimg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2022 - 2024 By Mello13</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">if you have any suggestion, please contact me at syf_mello@163.com !</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Mello13</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://skylersuen.github.io/2024/04/26/小米一面面经/">https://skylersuen.github.io/2024/04/26/小米一面面经/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2024/09/30/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E9%9D%A2%E7%BB%8F/"><i class="fa fa-chevron-left">  </i><span>【大模型面经</span></a></div><div class="next-post pull-right"><a href="/2024/04/17/python%E6%89%8B%E5%86%99Transformer/"><span>python手写Transformer</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://raw.githubusercontent.com/SkylerSuen/PicBase/master/topimg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2022 - 2024 By Mello13</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">if you have any suggestion, please contact me at syf_mello@163.com !</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
   tex2jax: {
     inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
     processEscapes: true,
