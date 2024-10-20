@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="当未来没有来时，它还没有来"><meta name="keywords" content=""><meta name="author" content="Mello13"><meta name="copyright" content="Mello13"><title>mello's blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><link rel="dns-prefetch" href="https://hm.baidu.com"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?d5cba8acec7c962be4afb068976dd3fc";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();</script><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '5.4.2'
+} </script><meta name="generator" content="Hexo 5.4.2"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%80.%E6%8C%87%E4%BB%A4%E5%BE%AE%E8%B0%83"><span class="toc-number">1.</span> <span class="toc-text">一.指令微调</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%8C.-out-of-memory-%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">二. Out of memory 问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%B8%89.-lora"><span class="toc-number">3.</span> <span class="toc-text">三. Lora</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BA%94.-llama"><span class="toc-number">4.</span> <span class="toc-text">五. LLaMa</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">Mello13</div><div class="author-info__description text-center">当未来没有来时，它还没有来</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">57</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">24</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">Categories</span><span class="pull-right">5</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" target="_blank" rel="noopener" href="https://xyzinc-xyx.github.io/">XYZinc</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://raw.githubusercontent.com/SkylerSuen/PicBase/master/topimg.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">mello's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"></span></div><div id="post-info"><div id="post-title">No title</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2024-10-20</time></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h4 id="一.指令微调">一.指令微调</h4>
+<ol type="1">
+<li>在指令微调中，如何设置、选择和优化不同的超参数，以及其对模型效果的影响？</li>
+</ol>
+<p>这里的超参数感觉有一些宽泛，我在这里做一下分类总览，并且仅讨论全参数微调的情况。不过说实话，数据集才是最重要的，所以建议先看问题2</p>
+<p>数据集 - drop-last</p>
+<p>模型本身 - 训练设置 - batchsize - clip grad - lr rate - weight decay
+- loss scale - warm up iters - lr decay style - lr decay iters</p>
+<ol start="2" type="1">
+<li>在指令微调中，如何选择最佳的指令策略，以及其对模型效果的影响？</li>
+</ol>
+<p>总的来说，你需要先明确自己需要向什么方面微调：是一个更对齐人类价值观的gossip
+bot？还是更具备解决问题能力的helper？是更健谈并回答内容更丰富？还是人狠话不多？是单领域？还是多领域？</p>
+<p>a.数据需要什么样的？</p>
+<p>b.该如何组织数据集来微调？</p>
+<p>首先是一些已知的要点：</p>
+<p>Flanv2提到的一些tricks</p>
+<ul>
+<li>更多样的任务-使用不同的提示模板</li>
+<li>混合few-shot和zero-shot learning</li>
+<li>考虑输入反转</li>
+<li>加入CoT</li>
+<li>任务混合权重按照经验考虑即可</li>
+</ul>
+<p>c.该如何评估sft后的model的能力？</p>
+<p>首先，不要用gpt4去做评测，因为你要知道题目中所谓的最佳一定是</p>
+<h4 id="二.-out-of-memory-问题">二. Out of memory 问题</h4>
+<p>一般来说，训练占用模型参数量的16倍大小（优化器、梯度、模型本身）；推理占用模型参数量的2倍大小（fp16是一个单位参数大小对应两个字节，int8是一个单位参数大小对应一个字节）。</p>
+<ul>
+<li><p>梯度累积</p></li>
+<li><p>混合精度训练AMP</p></li>
+<li><p>减轻模型参数</p></li>
+<li><p>分布式训练</p></li>
+<li><p>减少批量大小</p></li>
+<li><p>增加硬件资源</p></li>
+<li><p>数据处理与加载优化：例如，可以使用数据流水线技术来并行加载和处理数据，减少内存中同时存在的数据量</p></li>
+<li><p>梯度累计</p></li>
+</ul>
+<p>AMP：</p>
+<p>为什么需要混合精度训练呢？</p>
+<p>使用FP16训练神经网络，相比使用FP32有以下优点。</p>
+<ul>
+<li><p>内存占用减少：FP16的位宽是FP32的一半，所以权重等参数占用的内存也减少了一半，这样就可以训练更大的网络模型或者使用更多的数据。</p></li>
+<li><p>通讯效率提高：对于分布式训练，特别是大模型训练，通讯的开销是一个性能瓶颈，通讯的位宽减少了一半，就可以加快通讯速度，减少等待时间，提高数据流通效率。</p></li>
+<li><p>计算效率更高：在一些专门的AI加速芯片上，使用FP16的计算性能比FP32更快。
+但是使用FP16也会带来一些问题，主要有两个方面：</p></li>
+<li><p>数据溢出和</p></li>
+<li><p>舍入误差
+为了利用FP16的优势，提高深度学习训练的效率和性能，同时避免精度溢出和舍入误差的影响，可以采用FP16和FP32的混合精度训练，主要涉及到一下三个重要技术点：</p></li>
+<li><p>权重备份（Weight Backup）</p></li>
+<li><p>损失放大（Loss Scaling）</p></li>
+<li><p>精度累加（Precision Accumulated）</p></li>
+</ul>
+<h4 id="三.-lora">三. Lora</h4>
+<p>lora之前的PEFT方法是adapter/prefix/promp/P-tuning，但是Adapter会引入很强的推理延迟（只能串行），prefix/prompt/P-tuning很难练，而且要占用context
+length，变相的降低模型能力——所以，根本不改原来的model，这就引出了女主人公lora：Low-Rank
+Adaptation</p>
+<p>具体来说，就是考虑到语言模型（LLM尤其如此）的参数的低秩属性（low
+intrinsic
+dimension），或者说过参数化，在做finetune的时候不做full-finetune，而是用一个降维矩阵A和一个升维矩阵B去做finetune。如果我们认为原来的模型的某个参数矩阵为
+W0 - 那么可以认为原来经过全微调的参数矩阵为 W0+W' -
+但考虑到前面的低秩属性，在lora中我们可以简单认为 W'=A<em>B -
+其中AB的秩相当于是你认为的模型实际的秩。 - 这样的话在做推理的时候， h =
+W0</em>x+BA*x根本不会引入推理延迟，因为你只需要把训好的parms A B 加进
+W0的params就可以了。 -
+在Transformer中self-attention和mlp模块都有对应的params矩阵，对应加上lora即可。</p>
+<p>#### 四. RAG</p>
+<ol type="1">
+<li>RAG技术体系的总体思路</li>
+</ol>
+<p>数据预处理-&gt;分块（这一步骤很关键，有时候也决定了模型的效果）-&gt;文本向量化-&gt;query向量化-&gt;向量检索-&gt;重排-&gt;query+检索内容输入LLM-&gt;输出</p>
+<ol start="2" type="1">
+<li>使用外挂知识库主要为了解决什么问题</li>
+</ol>
+<ul>
+<li>克服遗忘问题</li>
+<li>提升回答的准确性、权威性、时效性</li>
+<li>解决通用模型针对一些小众领域没有涉猎的问题</li>
+<li>提高可控性和可解释性，提高模型的可信度和安全性</li>
+</ul>
+<ol start="3" type="1">
+<li>针对通用的RAG，你觉得还有哪些改进点？</li>
+</ol>
+<ul>
+<li>query侧：做query的纠错、改写，规范化和扩展</li>
+<li>对向量数据库做层次索引，提高检索效率和精度</li>
+<li>对LLM模型微调，针对当前垂直领域引入知识库，提升回答的专业性、时效性和正确性</li>
+<li>对最终输出做后处理，降低输出的不合理case</li>
+</ul>
+<h4 id="五.-llama">五. LLaMa</h4>
+<p>当前开源影响范围最广，生态建设最好的开源大模型是Meta的LLaMA。其依旧采用Transformers架构，并做了如下改动：</p>
+<ul>
+<li>为了提高训练稳定性，对每个子层做输入前置归一化，归一化函数为RMSNorm（受GPT-3启发）</li>
+<li>为了提升性能，SwishGLU激活函数替换ReLU激活函数（受PaLM启发）</li>
+<li>从绝对位置嵌入，改为旋转嵌入（受GPT-neo启发）</li>
+<li>使用causal multi-head
+attention的一个高效实现来减少内存占用和运行时间</li>
+</ul>
+<p>SWishGLU和GLU： - GLU
+的核心思想是通过门控机制来过滤信息，进而提高网络的表达能力和泛化能力。（门控机制有助于长距离建模）
+- SwishGLU 的核心思想是将 Swish 和 GLU 结合起来，SwishGLU
+实际上只是多乘了一个 g(x)。</p>
+<ol start="22" type="1">
+<li>LLaMA1/2的异同</li>
+</ol>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Mello13</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="https://skylersuen.github.io/2024/10/20/大模型面经/">https://skylersuen.github.io/2024/10/20/大模型面经/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2099/09/09/%E5%9B%BE%E7%89%87%E5%A4%B1%E6%95%88/"><i class="fa fa-chevron-left">  </i><span>解决看不到图片/背景的问题</span></a></div><div class="next-post pull-right"><a href="/2024/04/26/%E5%B0%8F%E7%B1%B3%E4%B8%80%E9%9D%A2%E9%9D%A2%E7%BB%8F/"><span>小米一面面经</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://raw.githubusercontent.com/SkylerSuen/PicBase/master/topimg.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2022 - 2024 By Mello13</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">if you have any suggestion, please contact me at syf_mello@163.com !</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><script type="text/x-mathjax-config">MathJax.Hub.Config({
+  tex2jax: {
+    inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+    processEscapes: true,
+    skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+  },
+  CommonHTML: {
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "HTML-CSS": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  },
+  "SVG": { 
+    linebreaks: { automatic: true, width: "90% container" }
+  }
+});
+</script><script type="text/x-mathjax-config">MathJax.Hub.Queue(function() {
+  var all = MathJax.Hub.getAllJax(), i;
+  for (i=0; i < all.length; i += 1) {
+    all[i].SourceElement().parentNode.className += ' has-jax';
+  }
+});
+</script><script src="https://cdn.jsdelivr.net/npm/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script></body></html>
